@@ -6,16 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Memer Demo</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        .form-wrap {
+            text-align: center;
+        }
+
+        input{
+            font-size: 1.1em;
+            max-width: 500px;
+            width: 90%;
+            margin-bottom: 15px;
+            padding: 4px;
+        }
+        button {
+            width: 90%;
+            max-width: 500px;
+            padding: 10px;
+            font-size: 1.3em;
+            background: red;
+            color: white;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Memer</h1>
-    <p>Lightweight meme generator</p>
-    <form method="post" action="https://wt-ba6416133b6a41deede9629062567f46-0.sandbox.auth0-extend.com/memer" enctype="multipart/form-data">
-        <input type="text" name="topText" placeholder="Top Text">
-        <input type="text" name="bottomText" placeholder="Bottom Text">
-        <input type="file" name="image">
-        <input type="submit" value="GENERATE A MEME!">
-    </form>    
+
+    <a href="https://github.com/itslenny/memer" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    <div class="form-wrap">
+        <h1>Memer</h1>
+        <p>Lightweight meme generator powered by <a href="https://webtask.io" target="_blank">webtask.io</a></p>
+        <form method="post" action="https://wt-ba6416133b6a41deede9629062567f46-0.sandbox.auth0-extend.com/memer" enctype="multipart/form-data">
+            <input type="text" name="topText" placeholder="Top Text"><br>
+            <input type="text" name="bottomText" placeholder="Bottom Text"><br>
+            <input type="file" name="image"><br>
+            <button type="submit">GENERATE A MEME!</button>
+        </form>
+    </div>
 </body>
+
 </html>
