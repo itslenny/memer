@@ -3,6 +3,10 @@
 const Jimp = require('jimp-forked');
 const multiparty = require('multiparty');
 
+const PRINT_OFFSET_X = 30; // HACK because the library's "center" is off center
+const PRINT_OFFSET_Y = 10;
+const PRINT_SHADOW_OFFSET = 3;
+
 const FIT_WIDTH = 1024;
 const FIT_HEIGHT = 768;
 const MIN_WIDTH = 640;
@@ -74,9 +78,9 @@ function requestHandler(context, req, res) {
  * @param {String} imagePath 
  * @param {String} topText 
  * @param {String} bottomText 
- * @returns {Buffer} buffer of the finished image file
+ * @returns {Promise<Buffer>} buffer of the finished image file
  */
-async function memeItUp(imagePath, topText, bottomText) {
+function memeItUp(imagePath, topText, bottomText) {
     return new Promise(async (resolve, reject) => {
         // load image
         let image = await Jimp.read(imagePath);
@@ -100,36 +104,27 @@ async function memeItUp(imagePath, topText, bottomText) {
             height = image.bitmap.height;
         }
 
-        // HACK because the libraries "center" is off center
-        let xPrintOffset = 30;
-
         // Load fonts
         let fontBlack = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
         let fontWhite = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
 
         // print top text and shadow
-        image.print(fontBlack, xPrintOffset, 10, {
+        let topTextOptions = {
             text: topText,
             alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
             alignmentY: Jimp.VERTICAL_ALIGN_TOP,
-        }, width, height);
-        image.print(fontWhite, xPrintOffset + 2, 12, {
-            text: topText,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_TOP,
-        }, width, height);
+        };
+        image.print(fontBlack, PRINT_OFFSET_X, PRINT_OFFSET_Y, topTextOptions, width, height);
+        image.print(fontWhite, PRINT_OFFSET_X + PRINT_SHADOW_OFFSET, PRINT_OFFSET_Y + PRINT_SHADOW_OFFSET, topTextOptions, width, height);
 
         // print top bottom and shadow
-        image.print(fontBlack, xPrintOffset, 10, {
+        let bottomTextOptions = {
             text: bottomText,
             alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
             alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
-        }, width, height);
-        image.print(fontWhite, xPrintOffset + 2, 12, {
-            text: bottomText,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_BOTTOM,
-        }, width, height);
+        };
+        image.print(fontBlack, PRINT_OFFSET_X, PRINT_OFFSET_Y, bottomTextOptions, width, height);
+        image.print(fontWhite, PRINT_OFFSET_X + PRINT_SHADOW_OFFSET, PRINT_OFFSET_Y + PRINT_SHADOW_OFFSET, bottomTextOptions, width, height);
 
         // generate image
         image.getBuffer('image/png', (e, data) => {
